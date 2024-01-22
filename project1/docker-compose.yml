@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  python-flask:
+    build: 
+      context: .
+    container_name: python-flask
+    env_file:
+      - docker_folder/app.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+    volumes:
+      - ./application:/app/application
+
+  database:
+    image: postgres:15-alpine
+    container_name: software-db
+    env_file:
+      - docker_folder/database_folder/database.env
+    ports:
+      - "6543:5432"
+    volumes:
+      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+
+volumes:
+  database-data: # named volumes can be managed easier using docker-compose
